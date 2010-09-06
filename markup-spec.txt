@@ -1,5 +1,5 @@
 Markup is a text markup language primarily useful for prose documents such as books and articles
-It is designed to be editable in a plain text editor\note{At least to the extent that Emacs can be considered a plain text editor} and to allow for arbitrary logical markup
+It is designed to be editable in a plain text editor (at least to the extent that Emacs can be considered a plain text editor) and to allow for arbitrary logical markup
 The grammar of a Markup file is defined in terms of a mapping to an abstract syntax tree which can then be rendered into a number of formats, e.g. HTML, PDF, TeX, RTF, etc.
 Markup files consist of Unicode text encoded in UTF-8
 Lines can be terminated with carriage return (U+000D), carriage-return/line-feed (U+000D U+000A), or line feed (U+000A)
@@ -11,54 +11,54 @@ As mentioned above, the Markup grammar defines a mapping between a Markup docume
 The tree is built out of tagged elements and strings
 Markup was originally developed in Lisp where the obvious representation for a Markup document is as s-expressions, with each tree represented by a list whose first element is a symbol indicating the tree’s tag
 This kind of tree structure also has an obvious representation in XML or HTML
-The abstract syntax tree is rooted in a single element whose tag is \code{body}
+The abstract syntax tree is rooted in a single element whose tag is `body`
 Its children are the elements described below
 The element names were, as will be obvious to anyone who knows HTML, chosen so that a trivial mapping from Markup to HTML gives a useful result but other than that pleasant coincidence, Markup defines no particular semantics for Markup documents
 Normal paragraphs are simply blocks of text separated by one or more blank lines
 They can contain single line breaks, which are converted to spaces during parsing
 The body of a paragraph can contain tagged markup as discussed below
-The tag of a paragraph node is \code{p}
-Headers are paragraphs marked as in Emacs outline-mode, with leading \code{*}’s followed by a single space
+The tag of a paragraph node is `p`
+Headers are paragraphs marked as in Emacs outline-mode, with leading `*`s followed by a single space
 The more stars the lower in the hierarchy the header
-The content of the header is everything after the \code{*} and the space and is otherwise parsed just like a paragraph
-Header nodes are tagged with \code{h\i{n}} where \i{n} is the number of stars
+The content of the header is everything after the `*` and the space and is otherwise parsed just like a paragraph
+Header nodes are tagged with `hn` where n is the number of stars
 Block quotes are one of three kinds of “sections” indicated by indentation
 A section ends at the end of the file or by the occurrence of a less-indented non-blank line
 Sections can also be nested
 A block quote is demarcated by two spaces of indentation relative to the enclosing section and can contain their own paragraphs, headers, lists, and verbatim sections
-Block quote nodes are tagged with \code{blockquote}
+Block quote nodes are tagged with `blockquote`
 Verbatim sections are indented three spaces relative to the enclosing section
 Within a verbatim section all text is captured exactly as is
-Verbatim sections are tagged with \code{pre}
-Lists are demarcated by two spaces of indentation followed by a list marker, either ‘\code{#}’ for an ordered (i.e. numbered) list or ‘\code{-}’ for an unordered (i.e. bulleted) list
-An ordered list is tagged with \code{ol} and an unordered list with \code{ul}
+Verbatim sections are tagged with `pre`
+Lists are demarcated by two spaces of indentation followed by a list marker, either `#` for an ordered (i.e. numbered) list or `-` for an unordered (i.e. bulleted) list
+An ordered list is tagged with `ol` and an unordered list with `ul`
 The list marker must be followed by a space and then the text of the first list item
-List items are tagged with \code{li} and can contain multiple paragraphs, the contents of which are indented to line up under first character of the beginning of the list item
+List items are tagged with `li` and can contain multiple paragraphs, the contents of which are indented to line up under first character of the beginning of the list item
 Subsequent items are marked with another list marker in the same column as the original list marker and another space
 A Markup processor can optionally support a few bits of syntax to make it more convenient to add hyperlinks to a document
-Within normal text (i.e. anywhere but a verbatim section) a link can be indicated by enclosing the text to act as the hyperlink with \code{\[]}s
-This maps to an element tagged \code{link}
-If the text between the \code{\[]}s includes a \code{|}, the text after the \code{|} is wrapped in a \code{key} element
-A paragraph consisting solely of text in \code{\[]}s followed by zero or more spaces followed by text enclosed in \code{<>}s is parsed as an element tagged \code{link_def} whose two children are a \code{link} element comprising the text between the \code{\[]}s and a \code{url} element comprising the text between the \code{<>}s
-The idea is that a Markup backend would render all the in-text \code{link} elements as hyperlinks with the \code{link} text linking to the URL given in the corresponding \code{link_def} element
+Within normal text (i.e. anywhere but a verbatim section) a link can be indicated by enclosing the text to act as the hyperlink with `[]`s
+This maps to an element tagged `link`
+If the text between the `[]`s includes a `|`, the text after the `|` is wrapped in a `key` element
+A paragraph consisting solely of text in `[]`s followed by zero or more spaces followed by text enclosed in `<>`s is parsed as an element tagged `link_def` whose two children are a `link` element comprising the text between the `[]`s and a `url` element comprising the text between the `<>`s
+The idea is that a Markup backend would render all the in-text `link` elements as hyperlinks with the `link` text linking to the URL given in the corresponding `link_def` element
 A given Markup processor can choose to implement the link syntax or not and, if it does, may provide a way to indicate whether or not it should be used when parsing a given document
-For all other markup, Markup uses the TeX-like notation \code{\\\i{tagname}\{\i{stuff}\}}
-Tag names can consist of letters, numbers, ‘\code{-}’, ‘\code{.}’, and ‘\code{+}’
+For all other markup, Markup uses the TeX-like notation `\tagname{stuff}`
+Tag names can consist of letters, numbers, `-`, `.`, and `+`
 Tagged markup can nest so you can have:
    \i{italic with \b{some bold added} and back to just italic}
 An element created from tagged markup is tagged with the tagname
 Certain tag names can be used to mark sub-documents which are parsed differently than simple spans of text
-The content of a sub-document—between the opening and closing \{\}s—is parsed like a document so it will contain at least one paragraph and can contain headers, block quotes, lists, verbatim sections, and even nested sub-documents
+The content of a sub-document—between the opening and closing {}s—is parsed like a document so it will contain at least one paragraph and can contain headers, block quotes, lists, verbatim sections, and even nested sub-documents
 Footnotes, for example, are commonly set up to be parsed as sub-documents
 Note that the blank line separating the paragraphs of the sub-document has no effect on the enclosing paragraph
 If a sub-document is embedded in a paragraph that is part of an indented section (i.e. a block quote or a list) then subsequent lines of the sub-document should be indented the same as the enclosing paragraph:
 A Markup processor will need to provide some more or less convenient way to specify that certain tag names should be parsed as sub-documents rather than character markup
 Outside of verbatim sections, a backslash can escape any character that is not a legal tag name character, stripping it of its syntactic significance
-The characters \code{\\}, \code{\{}, and \code{\}} must be escaped whenever they appear outside a verbatim section if they are to be part of the text
+The characters `\`, `{`, and `}` must be escaped whenever they appear outside a verbatim section if they are to be part of the text
 Other non-tag-name characters may be escaped anytime, but it is only necessary when they would otherwise have syntactic significance
-For example, \code{*} does not need to be escaped except at the beginning of a paragraph, where it would otherwise mark the paragraph as a header
+For example, `*` does not need to be escaped except at the beginning of a paragraph, where it would otherwise mark the paragraph as a header
 In the real world, Markup documents are often (usually) edited in Emacs
-Emacs has a mechanism whereby a a line starting with \code{-*-} indicates a \i{mode line} which tells emacs about how to edit the file
+Emacs has a mechanism whereby a a line starting with `-*-` indicates a \i{mode line} which tells emacs about how to edit the file
 For instance, in the Markup sources of this specification, the first line is:
    -*- mode: markup; -*-
 A Markup parser can choose to strip such modelines at the top level of a document to save having to strip them out later in processing
