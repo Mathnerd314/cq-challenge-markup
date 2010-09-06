@@ -1,49 +1,49 @@
 encoded in UTF-8
 EOL=CR (U+000D), CR/LF (U+000D U+000A), LF (U+000A)
-Tab (U+0009)=8 spaces
+Tab (U+0009)=`        `
 blankline=EOL /(whitespace)?/ EOL
 Trailing whitespace not preserved
 AST=tagged elements, strings
-AST=root 1 element tag=`body`,children=elements
+AST=root element tag=`body`,children=elements
 Normal ¶s=text blocks separated by (blanklines/+/)
 Normal ¶s ? 1 EOL=spaces
 body of ¶ ? tagged markup
 tag of ¶=`p`
-Header=¶ with leading `*`s followed by ` `
-more stars lower in hierarchy header
-header=`*`, ` `, content parsed like ¶
-Header=tagged with `h`# of stars
-Block quotes=1 of 3 sections indicated by indentation
+Header=¶ with leading `*`s, ` `
+header=`*`, ` `, content parse like ¶
+Header=tagged `h`# of stars
+Blockquotes=1 of 3 sections indicated by indentation
 section ends at EOF/less-indented non-blank line
 Sections nest
-block quote=2 indent, ? contain ¶s, headers, lists, verbatim
-Block quote=tagged with `blockquote`
+blockquote=2 indent, ? contain ¶s, headers, lists, verbatim
+Blockquote=tagged `blockquote`
 Verbatim=indent 3
 verbatim=section
 verbatim all text=captured exactly as is
-Verbatim=tagged with `pre`
-Lists=2 indent, list marker `#` for ordered list/`-` for unordered list
-ordered=tagged with `ol`, unordered with `ul`
+Verbatim=tagged `pre`
+Lists=2 indent, list marker `#` ordered/`-` unordered
+ordered=tagged `ol`, unordered `ul`
 list marker, ` `, text of 1st list item
-List items=tagged with `li`, contain ¶s, contents=indented to line up under 1st character of beginning of list item
+List items=tagged `li`, contain ¶s, contents=indented line up under 1st character of beginning of list item
 Subsequent items=indent, list marker in same column as original list marker, ` `
 normal text (!verbatim) link=`[`text to act as hyperlink`]`=element tagged `link`
-`[`text`]` includes `|`, text after `|`=wrapped in `key` element
-¶ solely `[`text`]`, / */, `<`text`>`=element tagged `link_def` children=`link` element comprising `[`text`], `url` element comprising `<`text`>` in-text `link` elements hyperlinks with `link` text linking to URL in corresponding `link_def` element
-other markup, uses TeX-like notation `\tagname{stuff}`
+`[`text`]` includes `|`, text after `|`=wrap in `key` element
+¶ solely `[`text`]`, / */, `<`text`>`=element tagged `link_def` children=`link` element comprising `[`text`], `url` element comprising `<`text`>` 
+in-text `link` element hyperlinks with `link` text linking to URL in corresponding `link_def` element
+other markup, use `\tagname{stuff}`
 Tagnames consist of letters, numbers, `-`, `.`, `+`
-Tagged markup ? nest
-element from tagged markup=tagged with tagname
-Certain tagname ?=subdocument parsed differently than span of text
-`{`content of subdocument`}`=document, contain ¶/+/, contain? headers, block quotes, lists, verbatim, nested subdocuments
-Footnote=parsed as subdocument
-blank line separating ¶s of subdocument no effect enclosing ¶
+Tagged markup nests
+element from tagged markup=tagged tagname
+Certain tagname=subdocument parsed differently than span of text
+`{`content of subdocument`}`=document, contain ¶/+/, contain? headers, blockquotes, lists, verbatim, nested subdocuments
+Footnote=parsed subdocument
+blankline separating ¶s of subdocument no effect enclosing ¶
 If subdocument=part of indented section then subsequent lines of subdocument indented as enclosing ¶
-specify certain tag names parsed as subdocuments rather than character markup
-!verbatim, `\` escape any not legal tag name character
+certain tagnames parsed subdocuments rather than character markup
+!verbatim, `\` escape any not legal tagname character
 `\`, `{`, `}` escaped outside verbatim
-non-tag-name characters=escaped anytime, only necessary when significant
-`*` !escaped except at beginning of ¶ where `*` mark ¶ as header
+non-tag-name characters=escaped anytime
+`*` !escaped except beginning of ¶ where `*` mark ¶ header
 start `-*-`=modeline
-strip modelines at toplevel of document to save strip later in processing
-map from AST to XML: element mapped to XML with same name, string as text
+strip modelines at toplevel to save processing
+map from AST to XML: element map to XML with same name, string as text
