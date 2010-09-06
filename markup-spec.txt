@@ -1,6 +1,6 @@
-grammar of file=defined in terms of mapping to abstract syntax tree ?=rendered into number of formats, e.g. HTML, PDF, TeX, RTF, etc.
-files consist of Unicode text encoded in UTF-8
-Lines ?=terminated with carriage return (U+000D), carriage-return/line-feed (U+000D U+000A), line feed (U+000A)
+grammar=mapping to abstract syntax tree ?=rendered
+files=text encoded in UTF-8
+Lines=terminated with carriage return (U+000D), carriage-return/line-feed (U+000D U+000A), line feed (U+000A)
 Tab characters (U+0009)=8 spaces
 blank line (has syntactic meaning)=2 consecutive end-of-line sequences /?/ with white space between end-of-line sequences
 Trailing white space has no meaning, not preserved by processor
@@ -10,7 +10,7 @@ abstract syntax tree=rooted in 1 element whose tag=`body`
 abstract syntax tree children=elements
 element names defines no semantics for documents
 Normal paragraphs=blocks of text separated by /+/ blank lines
-Normal paragraphs ? contain 1 line breaks=converted to spaces during parsing
+Normal paragraphs ? contain 1 line break=spaces
 body of paragraph ? contain tagged markup
 tag of paragraph node=`p`
 Headers=paragraphs marked with leading `*`s followed by 1 space
@@ -20,37 +20,36 @@ Header nodes=tagged with `hn` where n=number of stars
 Block quotes=1 of 3 kinds of “sections” indicated by indentation
 section ends at end of file/by occurrence of less-indented non-blank line
 Sections ?=nested
-block quote=demarcated by 2 spaces of indentation relative to enclosing section, ? contain paragraphs, headers, lists, verbatim sections
+block quote=demarcated by 2 indentation relative to enclosing section, ? contain paragraphs, headers, lists, verbatim sections
 Block quote nodes=tagged with `blockquote`
-Verbatim sections=indented 3 spaces relative to enclosing section
-Within verbatim section all text=captured exactly as is
+Verbatim sections=indented 3 relative to enclosing section
+in verbatim section all text=captured exactly as is
 Verbatim sections=tagged with `pre`
-Lists=demarcated by 2 spaces of indentation followed by list marker, either `#` for ordered (numbered) list/`-` for unordered (bulleted) list
-ordered list=tagged with `ol`, unordered list with `ul`
+Lists=demarcated by 2 indentation followed by list marker, either `#` for ordered list/`-` for unordered list
+ordered list=tagged with `ol`, unordered with `ul`
 list marker=followed by space, then text of 1st list item
 List items=tagged with `li`, ? contain multiple paragraphs, contents=indented to line up under 1st character of beginning of list item
 Subsequent items=marked with another list marker in same column as original list marker, 1 space
 support syntax to add hyperlinks to document
-Within normal text (anywhere but verbatim section) link ?=indicated by enclosing text to act as hyperlink with `[]`s
-enclosing text to act as hyperlink with `[]`s maps to element tagged `link`
+Within normal text (anywhere but verbatim section) link=enclosing text to act as hyperlink with `[]`s=element tagged `link`
 If text between `[]`s includes `|`, text after `|`=wrapped in `key` element
-paragraph consisting solely of text in `[]`s followed by /*/ spaces followed by text enclosed in `<>`s=parsed as element tagged `link_def` whose 2 children=`link` element comprising text between `[]`s, `url` element comprising text between `<>`s
-idea=that backend render all in-text `link` elements as hyperlinks with `link` text linking to URL given in corresponding `link_def` element
-choose to implement link syntax/not, if  processor does, ? provide way to indicate whether/not link syntax should=used when parsing given document
+paragraph consisting solely of text in `[]`s followed by /*/ spaces followed by text enclosed in `<>`s=element tagged `link_def` whose 2 children=`link` element comprising text between `[]`s, `url` element comprising text between `<>`s
+idea=backend render in-text `link` elements as hyperlinks with `link` text linking to URL given in corresponding `link_def` element
+choose to implement link syntax/not, if does, indicate whether/not link syntax should=used when parsing given document
 other markup, uses TeX-like notation `\tagname{stuff}`
-Tag names ? consist of letters, numbers, `-`, `.`, `+`
+Tag names consist of letters, numbers, `-`, `.`, `+`
 Tagged markup ? nest
-element created from tagged markup=tagged with tagname
-Certain tag names ?=used to mark sub-documents parsed differently than simple spans of text
+element from tagged markup=tagged with tagname
+Certain tag names ?=sub-documents parsed differently than simple spans of text
 content of sub-document=between opening, closing {}s=parsed like document, contain /+/ paragraph, ?contain headers, block quotes, lists, verbatim sections, even nested sub-documents
 Footnotes=parsed as sub-documents
-blank line separating paragraphs of sub-document has no effect on enclosing paragraph
-If sub-document=embedded in paragraph=part of indented section then subsequent lines of sub-document should=indented same as enclosing paragraph
-provide way to specify that certain tag names parsed as sub-documents rather than character markup
-Outside of verbatim sections, backslash ? escape any character that=not legal tag name character, stripping any character of syntactic significance
-characters `\`, `{`, `}`=escaped whenever `\`, `{`, `}` appear outside verbatim section if they=part of text
-Other non-tag-name characters=escaped anytime, only necessary when non-tag-name characters would otherwise have syntactic significance
-`*` does not need to=escaped except at beginning of paragraph, where `*` would otherwise mark paragraph as header
+blank line separating paragraphs of sub-document no effect enclosing paragraph
+If sub-document=embedded in paragraph=part of indented section then subsequent lines of sub-document should=indented as enclosing paragraph
+specify certain tag names parsed as sub-documents rather than character markup
+Outside of verbatim sections, backslash escape any character not legal tag name character, stripping of syntactic significance
+`\`, `{`, `}`=escaped outside verbatim section if part of text
+non-tag-name characters=escaped anytime, only necessary when otherwise have syntactic significance
+`*` not escaped except at beginning of paragraph, where `*` otherwise mark paragraph as header
 line starting with `-*-` indicates \i{mode line}
 strip modelines at top level of document to save having to strip modelines out later in processing
 complete system consists of parser parse text file into data structure representing abstract syntax tree, /+/ back-ends render such tree into some other form
