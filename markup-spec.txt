@@ -1,24 +1,19 @@
-=text markup language useful for prose documents such as books, articles
-=designed to=editable in plain text editor (at least to extent that Emacs ?=considered plain text editor), to allow for arbitrary logical markup
-grammar of  file=defined in terms of mapping to abstract syntax tree which ?=rendered into number of formats, e.g. HTML, PDF, TeX, RTF, etc.
+grammar of file=defined in terms of mapping to abstract syntax tree which ?=rendered into number of formats, e.g. HTML, PDF, TeX, RTF, etc.
 files consist of Unicode text encoded in UTF-8
 Lines ?=terminated with carriage return (U+000D), carriage-return/line-feed (U+000D U+000A), line feed (U+000A)
 Tab characters (U+0009)=8 spaces
 blank line (which has syntactic meaning)=2 consecutive end-of-line sequences /?/ with white space between end-of-line sequences
 Trailing white space has no meaning, not preserved by processor
-basic syntax=similar to Markdown, reStructuredText with bit of TeX thrown in for good measure
 grammar defines mapping between document, abstract syntax tree
 tree=built out of tagged elements, strings
-=developed in Lisp where obvious representation for document=as s-expressions, with each tree represented by list whose 1st element=symbol indicating tree’s tag
-This kind of tree structure also has representation in XML/HTML
 abstract syntax tree=rooted in 1 element whose tag=`body`
 abstract syntax tree children=elements
-element names chosen so trivial mapping to HTML gives useful result but other than that, defines no semantics for documents
+element names defines no semantics for documents
 Normal paragraphs=blocks of text separated by /+/ blank lines
 Normal paragraphs ? contain 1 line breaks=converted to spaces during parsing
 body of paragraph ? contain tagged markup
 tag of paragraph node=`p`
-Headers=paragraphs marked as in Emacs outline-mode, with leading `*`s followed by 1 space
+Headers=paragraphs marked with leading `*`s followed by 1 space
 more stars lower in hierarchy header
 content of header=everything after `*`, space, =otherwise parsed like paragraph
 Header nodes=tagged with `hn` where n=number of stars
@@ -42,7 +37,7 @@ If text between `[]`s includes `|`, text after `|`=wrapped in `key` element
 paragraph consisting solely of text in `[]`s followed by /*/ spaces followed by text enclosed in `<>`s=parsed as element tagged `link_def` whose 2 children=`link` element comprising text between `[]`s, `url` element comprising text between `<>`s
 idea=that backend render all in-text `link` elements as hyperlinks with `link` text linking to URL given in corresponding `link_def` element
 given processor ? choose to implement link syntax/not, if  processor does, ? provide way to indicate whether/not link syntax should=used when parsing given document
-For all other markup, uses TeX-like notation `\tagname{stuff}`
+other markup, uses TeX-like notation `\tagname{stuff}`
 Tag names ? consist of letters, numbers, `-`, `.`, `+`
 Tagged markup ? nest so ? have:
    \i{italic with \b{some bold added}, back to just italic}
@@ -50,16 +45,15 @@ element created from tagged markup=tagged with tagname
 Certain tag names ?=used to mark sub-documents which=parsed differently than simple spans of text
 content of sub-document—between opening, closing {}s—is parsed like document so=contain /+/ paragraph, ?contain headers, block quotes, lists, verbatim sections, even nested sub-documents
 Footnotes=set up to=parsed as sub-documents
-Note that blank line separating paragraphs of sub-document has no effect on enclosing paragraph
+blank line separating paragraphs of sub-document has no effect on enclosing paragraph
 If sub-document=embedded in paragraph that=part of indented section (i.e. block quote/list) then subsequent lines of sub-document should=indented same as enclosing paragraph:
 processor=provide way to specify that certain tag names parsed as sub-documents rather than character markup
 Outside of verbatim sections, backslash ? escape any character that=not legal tag name character, stripping any character of syntactic significance
 characters `\`, `{`, `}`=escaped whenever `\`, `{`, `}` appear outside verbatim section if they=part of text
 Other non-tag-name characters=escaped anytime, only necessary when non-tag-name characters would otherwise have syntactic significance
 `*` does not need to=escaped except at beginning of paragraph, where `*` would otherwise mark paragraph as header
-documents=often (usually) edited in Emacs
-Emacs has mechanism whereby line starting with `-*-` indicates \i{mode line} which tells emacs about how to edit file
-For instance, in  sources of specification, first line is:
+line starting with `-*-` indicates \i{mode line}
+in sources of specification, first line is:
    -*- mode: markup; -*-
 parser ? choose to strip modelines at top level of document to save having to strip modelines out later in processing
 complete system consists of parser that ? parse text file in syntax into data structure representing resulting abstract syntax tree, /+/ back-ends that ? render such tree into some other form
