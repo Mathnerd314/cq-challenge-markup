@@ -1,8 +1,8 @@
-grammar of file=defined in terms of mapping to abstract syntax tree which ?=rendered into number of formats, e.g. HTML, PDF, TeX, RTF, etc.
+grammar of file=defined in terms of mapping to abstract syntax tree ?=rendered into number of formats, e.g. HTML, PDF, TeX, RTF, etc.
 files consist of Unicode text encoded in UTF-8
 Lines ?=terminated with carriage return (U+000D), carriage-return/line-feed (U+000D U+000A), line feed (U+000A)
 Tab characters (U+0009)=8 spaces
-blank line (which has syntactic meaning)=2 consecutive end-of-line sequences /?/ with white space between end-of-line sequences
+blank line (has syntactic meaning)=2 consecutive end-of-line sequences /?/ with white space between end-of-line sequences
 Trailing white space has no meaning, not preserved by processor
 grammar defines mapping between document, abstract syntax tree
 tree=built out of tagged elements, strings
@@ -28,33 +28,30 @@ Verbatim sections=tagged with `pre`
 Lists=demarcated by 2 spaces of indentation followed by list marker, either `#` for ordered (numbered) list/`-` for unordered (bulleted) list
 ordered list=tagged with `ol`, unordered list with `ul`
 list marker=followed by space, then text of 1st list item
-List items=tagged with `li`, ? contain multiple paragraphs, contents of which=indented to line up under 1st character of beginning of list item
+List items=tagged with `li`, ? contain multiple paragraphs, contents=indented to line up under 1st character of beginning of list item
 Subsequent items=marked with another list marker in same column as original list marker, 1 space
- processor ? support syntax to add hyperlinks to document
+support syntax to add hyperlinks to document
 Within normal text (anywhere but verbatim section) link ?=indicated by enclosing text to act as hyperlink with `[]`s
 enclosing text to act as hyperlink with `[]`s maps to element tagged `link`
 If text between `[]`s includes `|`, text after `|`=wrapped in `key` element
 paragraph consisting solely of text in `[]`s followed by /*/ spaces followed by text enclosed in `<>`s=parsed as element tagged `link_def` whose 2 children=`link` element comprising text between `[]`s, `url` element comprising text between `<>`s
 idea=that backend render all in-text `link` elements as hyperlinks with `link` text linking to URL given in corresponding `link_def` element
-given processor ? choose to implement link syntax/not, if  processor does, ? provide way to indicate whether/not link syntax should=used when parsing given document
+choose to implement link syntax/not, if  processor does, ? provide way to indicate whether/not link syntax should=used when parsing given document
 other markup, uses TeX-like notation `\tagname{stuff}`
 Tag names ? consist of letters, numbers, `-`, `.`, `+`
-Tagged markup ? nest so ? have:
-   \i{italic with \b{some bold added}, back to just italic}
+Tagged markup ? nest
 element created from tagged markup=tagged with tagname
-Certain tag names ?=used to mark sub-documents which=parsed differently than simple spans of text
-content of sub-document—between opening, closing {}s—is parsed like document so=contain /+/ paragraph, ?contain headers, block quotes, lists, verbatim sections, even nested sub-documents
-Footnotes=set up to=parsed as sub-documents
+Certain tag names ?=used to mark sub-documents parsed differently than simple spans of text
+content of sub-document=between opening, closing {}s=parsed like document, contain /+/ paragraph, ?contain headers, block quotes, lists, verbatim sections, even nested sub-documents
+Footnotes=parsed as sub-documents
 blank line separating paragraphs of sub-document has no effect on enclosing paragraph
-If sub-document=embedded in paragraph that=part of indented section (i.e. block quote/list) then subsequent lines of sub-document should=indented same as enclosing paragraph:
-processor=provide way to specify that certain tag names parsed as sub-documents rather than character markup
+If sub-document=embedded in paragraph=part of indented section then subsequent lines of sub-document should=indented same as enclosing paragraph
+provide way to specify that certain tag names parsed as sub-documents rather than character markup
 Outside of verbatim sections, backslash ? escape any character that=not legal tag name character, stripping any character of syntactic significance
 characters `\`, `{`, `}`=escaped whenever `\`, `{`, `}` appear outside verbatim section if they=part of text
 Other non-tag-name characters=escaped anytime, only necessary when non-tag-name characters would otherwise have syntactic significance
 `*` does not need to=escaped except at beginning of paragraph, where `*` would otherwise mark paragraph as header
 line starting with `-*-` indicates \i{mode line}
-in sources of specification, first line is:
-   -*- mode: markup; -*-
-parser ? choose to strip modelines at top level of document to save having to strip modelines out later in processing
-complete system consists of parser that ? parse text file in syntax into data structure representing resulting abstract syntax tree, /+/ back-ends that ? render such tree into some other form
-For purposes of testing specify trivial mapping from abstract tree to well-formed XML: each element=mapped to XML element with same name, with node children mapped to XML in same way, string children as text
+strip modelines at top level of document to save having to strip modelines out later in processing
+complete system consists of parser parse text file into data structure representing abstract syntax tree, /+/ back-ends render such tree into some other form
+specify trivial mapping from abstract tree to well-formed XML: each element=mapped to XML element with same name, with node children mapped to XML in same way, string children as text
